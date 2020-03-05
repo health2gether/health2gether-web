@@ -9,6 +9,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import 'hammerjs';
 
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { FakeDbService } from 'app/fake-db/fake-db.service';
+
 import { FuseModule } from '@fuse/fuse.module';
 import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseProgressBarModule, FuseSidebarModule, FuseThemeOptionsModule } from '@fuse/components';
@@ -18,11 +21,38 @@ import { fuseConfig } from 'app/fuse-config';
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
 import { SampleModule } from 'app/main/sample/sample.module';
+import { LoginModule } from 'app/main/login/login.module';
+import { ProfileModule } from 'app/main/profile/profile.module';
+import { UICardsModule } from 'app/main/cards/cards.module';
+import { RegisterModule } from 'app/main/register/register.module';
+import { AuthGuard } from './main/auth-guard.service';
+import { AuthService } from './main/auth.service';
+import { NotAuthorizedModule } from './main/notauthorized/notauthorized.module';
 
 const appRoutes: Routes = [
     {
-        path      : '**',
+        path      : 'cards',
+        redirectTo: 'cards'
+    },
+    {
+        path      : 'login',
+        redirectTo: 'login'
+    },
+    {
+        path      : 'profile',
+        redirectTo: 'profile'
+    },
+    {
+        path      : 'register',
+        redirectTo: 'register'
+    },
+    {
+        path      : 'sample',
         redirectTo: 'sample'
+    },
+    {
+        path      : 'notauthorized',
+        redirectTo: 'notauthorized'
     }
 ];
 
@@ -37,6 +67,10 @@ const appRoutes: Routes = [
         RouterModule.forRoot(appRoutes),
 
         TranslateModule.forRoot(),
+        InMemoryWebApiModule.forRoot(FakeDbService, {
+            delay             : 0,
+            passThruUnknownUrl: true
+        }),
 
         // Material moment date module
         MatMomentDateModule,
@@ -54,11 +88,17 @@ const appRoutes: Routes = [
 
         // App modules
         LayoutModule,
-        SampleModule
+        LoginModule,
+        ProfileModule,
+        SampleModule,
+        UICardsModule,
+        RegisterModule,
+        NotAuthorizedModule
     ],
     bootstrap   : [
         AppComponent
-    ]
+    ],
+    providers: [AuthGuard, AuthService]
 })
 export class AppModule
 {

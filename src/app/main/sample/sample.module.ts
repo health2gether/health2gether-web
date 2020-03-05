@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { MatButtonModule } from '@angular/material/button';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 
@@ -19,6 +20,8 @@ const routes = [
     ],
     imports     : [
         RouterModule.forChild(routes),
+
+        MatButtonModule,
 
         TranslateModule,
 
