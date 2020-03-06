@@ -19,6 +19,7 @@ import { KnowledgeBaseFakeDb } from 'app/fake-db/knowledge-base';
 import { IconsFakeDb } from 'app/fake-db/icons';
 import { ChatPanelFakeDb } from 'app/fake-db/chat-panel';
 import { QuickPanelFakeDb } from 'app/fake-db/quick-panel';
+import { ActivityFakeDb } from 'app/fake-db/activity';
 
 export class FakeDbService implements InMemoryDbService
 {
@@ -95,7 +96,9 @@ export class FakeDbService implements InMemoryDbService
 
             // Quick Panel
             'quick-panel-notes' : QuickPanelFakeDb.notes,
-            'quick-panel-events': QuickPanelFakeDb.events
+            'quick-panel-events': QuickPanelFakeDb.events,
+
+            'activity': ActivityFakeDb.all
         };
     }
 }

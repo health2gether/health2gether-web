@@ -14,8 +14,8 @@
         </div>
 
         <div class="actions" fxLayout="row" fxLayoutAlign="end center" [@animate]="{value:'*',params:{delay:'200ms'}}">
-            <button mat-raised-button color="accent" aria-label="Follow">Follow</button>
-            <button mat-raised-button color="primary" aria-label="Send Message">Send Message</button>
+            <button mat-raised-button color="accent" aria-label="Follow">Seguir</button>
+            <button mat-raised-button color="primary" aria-label="Send Message">Enviar Mensagem</button>
         </div>
 
     </div>
@@ -23,8 +23,9 @@
 
     <!-- CONTENT -->
     <div class="content">
+        <profile-about></profile-about>
 
-        <mat-tab-group dynamicHeight="true">
+        <!-- <mat-tab-group dynamicHeight="true">
 
             <mat-tab label="Timeline">
                 <profile-timeline></profile-timeline>
@@ -38,7 +39,7 @@
                 <profile-photos-videos></profile-photos-videos>
             </mat-tab>
 
-        </mat-tab-group>
+        </mat-tab-group> -->
 
     </div>
     <!-- / CONTENT -->

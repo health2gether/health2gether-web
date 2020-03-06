@@ -6,6 +6,7 @@ import { fuseAnimations } from '@fuse/animations';
 
 import { AuthService } from '../auth.service';
 import { Login } from './login.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'login',
@@ -16,6 +17,7 @@ import { Login } from './login.model';
 })
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
+    msgError: string;
 
     /**
      * Constructor
@@ -26,7 +28,8 @@ export class LoginComponent implements OnInit {
     constructor(
         private _fuseConfigService: FuseConfigService,
         private _formBuilder: FormBuilder,
-        private authService: AuthService
+        private authService: AuthService,
+        private router: Router
     ) {
         // Configure the layout
         this._fuseConfigService.config = {
@@ -48,8 +51,18 @@ export class LoginComponent implements OnInit {
     }
 
     onLogin() {
+        this.msgError = null;
         let login = new Login(this.loginForm.get("email").value, this.loginForm.get("password").value);
-        this.authService.login(login);
+        this.authService.login(login)
+        .subscribe(
+            user => {
+                if(user) {
+                    this.router.navigate(['/']);
+                } else {
+                    this.msgError = 'Usuário ou senha inválido!';
+                }
+            }
+          );
     }
 
     // -----------------------------------------------------------------------------------------------------

@@ -13,13 +13,7 @@ export const navigation: FuseNavigation[] = [
                 translate: 'NAV.SAMPLE.TITLE',
                 type     : 'item',
                 icon     : 'home',
-                url      : '/home',
-                badge    : {
-                    title    : '25',
-                    translate: 'NAV.SAMPLE.BADGE',
-                    bg       : '#F44336',
-                    fg       : '#FFFFFF'
-                }
+                url      : '/home'
             }
         ]
     }
