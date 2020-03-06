@@ -1,55 +1,42 @@
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 
+import { Observable, pipe,  } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { GatewayService } from 'app/shared/gateway.service';
+import { Login } from './login/login.model';
+import { User } from '../model/user.model';
+
 @Injectable()
 export class AuthService {
-  token: string;
+  // token: string;
+  user: User;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private gatewayService: GatewayService) { }
 
-  signupUser(email: string, password: string) {
-    console.log('signupUser');
-    // firebase.auth().createUserWithEmailAndPassword(email, password)
-    //   .catch(
-    //     error => console.log(error)
-    //   )
-  }
-
-  signinUser(email: string, password: string) {
-    console.log('signinUser');
-
-    // firebase.auth().signInWithEmailAndPassword(email, password)
-    //   .then(
-    //     response => {
-    //       this.router.navigate(['/']);
-    //       firebase.auth().currentUser.getToken()
-    //         .then(
-    //           (token: string) => this.token = token
-    //         )
-    //     }
-    //   )
-    //   .catch(
-    //     error => console.log(error)
-    //   );
+  login(login: Login) {
+    this.gatewayService.login(login)
+      .subscribe(
+        user => {
+          console.log(user);
+          this.user = user;
+          this.router.navigate(['/']);
+        },
+        error => {
+          console.log(error);
+          this.user = null;
+        }
+      );   
   }
 
   logout() {
-    console.log('logout');
-    //firebase.auth().signOut();
-    // this.token = null;
-  }
-
-  getToken() {
-    console.log('getToken');
-    // firebase.auth().currentUser.getToken()
-    //   .then(
-    //     (token: string) => this.token = token
-    //   );
-    // return this.token;
+    this.user = null;
+    this.router.navigate(['/login']);
   }
 
   isAuthenticated() {
     console.log('isAuthenticated');
-    return this.token != null;
+    return this.user != null;
   }
 }

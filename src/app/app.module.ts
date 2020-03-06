@@ -20,16 +20,21 @@ import { fuseConfig } from 'app/fuse-config';
 
 import { AppComponent } from 'app/app.component';
 import { LayoutModule } from 'app/layout/layout.module';
-import { SampleModule } from 'app/main/sample/sample.module';
+import { HomeModule } from 'app/main/home/home.module';
 import { LoginModule } from 'app/main/login/login.module';
 import { ProfileModule } from 'app/main/profile/profile.module';
 import { UICardsModule } from 'app/main/cards/cards.module';
 import { RegisterModule } from 'app/main/register/register.module';
 import { AuthGuard } from './main/auth-guard.service';
 import { AuthService } from './main/auth.service';
+import { GatewayService } from './shared/gateway.service';
 import { NotAuthorizedModule } from './main/notauthorized/notauthorized.module';
 
 const appRoutes: Routes = [
+    {
+        path      : 'home',
+        redirectTo: 'home'
+    },
     {
         path      : 'cards',
         redirectTo: 'cards'
@@ -47,12 +52,13 @@ const appRoutes: Routes = [
         redirectTo: 'register'
     },
     {
-        path      : 'sample',
-        redirectTo: 'sample'
-    },
-    {
         path      : 'notauthorized',
         redirectTo: 'notauthorized'
+    },
+    {
+        path      : '',
+        redirectTo: 'home',
+        pathMatch : 'full'
     }
 ];
 
@@ -90,7 +96,7 @@ const appRoutes: Routes = [
         LayoutModule,
         LoginModule,
         ProfileModule,
-        SampleModule,
+        HomeModule,
         UICardsModule,
         RegisterModule,
         NotAuthorizedModule
@@ -98,7 +104,7 @@ const appRoutes: Routes = [
     bootstrap   : [
         AppComponent
     ],
-    providers: [AuthGuard, AuthService]
+    providers: [AuthGuard, AuthService, GatewayService]
 })
 export class AppModule
 {

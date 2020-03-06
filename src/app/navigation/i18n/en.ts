@@ -2,9 +2,9 @@ export const locale = {
     lang: 'en',
     data: {
         'NAV': {
-            'APPLICATIONS': 'Applications',
+            'APPLICATIONS': 'Menu',
             'SAMPLE'        : {
-                'TITLE': 'Sample',
+                'TITLE': 'Home',
                 'BADGE': '25'
             }
         }

@@ -4,15 +4,17 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FuseConfigService } from '@fuse/services/config.service';
 import { fuseAnimations } from '@fuse/animations';
 
+import { AuthService } from '../auth.service';
+import { Login } from './login.model';
+
 @Component({
-    selector     : 'login',
-    templateUrl  : './login.component.html',
-    styleUrls    : ['./login.component.scss'],
+    selector: 'login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+    animations: fuseAnimations
 })
-export class LoginComponent implements OnInit
-{
+export class LoginComponent implements OnInit {
     loginForm: FormGroup;
 
     /**
@@ -23,19 +25,19 @@ export class LoginComponent implements OnInit
      */
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _formBuilder: FormBuilder
-    )
-    {
+        private _formBuilder: FormBuilder,
+        private authService: AuthService
+    ) {
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
-                navbar   : {
+                navbar: {
                     hidden: true
                 },
-                toolbar  : {
+                toolbar: {
                     hidden: true
                 },
-                footer   : {
+                footer: {
                     hidden: true
                 },
                 sidepanel: {
@@ -45,6 +47,11 @@ export class LoginComponent implements OnInit
         };
     }
 
+    onLogin() {
+        let login = new Login(this.loginForm.get("email").value, this.loginForm.get("password").value);
+        this.authService.login(login);
+    }
+
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
     // -----------------------------------------------------------------------------------------------------
@@ -52,11 +59,12 @@ export class LoginComponent implements OnInit
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         this.loginForm = this._formBuilder.group({
-            email   : ['', [Validators.required, Validators.email]],
+            email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required]
         });
     }
+
+
 }
