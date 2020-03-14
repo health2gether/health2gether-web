@@ -1,32 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
 import { Login } from '../main/login/login.model';
 import { User } from '../model/user.model';
+import { Token } from 'app/main/login/token.model';
 
 @Injectable()
 export class GatewayService {
   url: string;
 
   constructor(private http: HttpClient) {
-    this.url = 'http://localhost:8082';
+    this.url = 'http://localhost:9091';
+    // this.url = 'http://health2gether-api.sa-east-1.elasticbeanstalk.com'
   }
 
-  login(login: Login): Observable<User> {
-    return this.http.get<User>(`${this.url}/users/?email=${login.email}&password=${login.password}`);
-  }
+  login(login: Login): Observable<Token> {
+    // return this.http.get<User>(`${this.url}/users/?email=${login.email}&password=${login.password}`);
 
-  /*
-      saveOrder(order): Promise<any>
-      {
-          return new Promise((resolve, reject) => {
-              this._httpClient.post('api/e-commerce-orders/' + order.id, order)
-                  .subscribe((response: any) => {
-                      resolve(response);
-                  }, reject);
-          });
-      }
-    */
+    // const httpOptions = {
+    //   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    //   observe: 'response' as 'response'
+    // };
+    
+    return this.http.post<Token>(`${this.url}/login`, login);
+  }
+    
 }

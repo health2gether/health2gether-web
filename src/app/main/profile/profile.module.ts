@@ -12,7 +12,7 @@ import { ProfileComponent } from 'app/main/profile/profile.component';
 import { ProfileTimelineComponent } from 'app/main/profile/tabs/timeline/timeline.component';
 import { ProfileAboutComponent } from 'app/main/profile/tabs/about/about.component';
 import { ProfilePhotosVideosComponent } from 'app/main/profile/tabs/photos-videos/photos-videos.component';
-
+import { AuthGuard } from 'app/main/auth-guard.service';
 
 const routes = [
     {
@@ -20,7 +20,8 @@ const routes = [
         component: ProfileComponent,
         resolve  : {
             profile: ProfileService
-        }
+        },
+        canActivate: [AuthGuard]
     }
 ];
 
