@@ -23,5 +23,13 @@ export class GatewayService {
   createUser(user: User): Observable<User> {
     return this.http.post<User>(`${this.url}/user/users`, user);
   }
-    
+
+  getUser(token: string) {
+    return this.http.get<User>(`${this.url}/user/users/me`, {
+      headers: new HttpHeaders({
+        "Authorization": token
+      })
+    });
+  }
+
 }

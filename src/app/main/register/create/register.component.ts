@@ -93,7 +93,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
 
     onRegister(): void {
-        console.log(this.registerForm);
         let user = new User(
             this.registerForm.get('name').value,
             this.registerForm.get('email').value,

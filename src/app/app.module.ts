@@ -49,7 +49,7 @@ const appRoutes: Routes = [
     },
     {
         path      : 'register',
-        redirectTo: 'register'
+        loadChildren: () => import('./main/register/register.module').then(m => m.RegisterModule)
     },
     {
         path      : 'notauthorized',
