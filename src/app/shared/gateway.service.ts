@@ -17,14 +17,11 @@ export class GatewayService {
   }
 
   login(login: Login): Observable<Token> {
-    // return this.http.get<User>(`${this.url}/users/?email=${login.email}&password=${login.password}`);
-
-    // const httpOptions = {
-    //   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    //   observe: 'response' as 'response'
-    // };
-    
     return this.http.post<Token>(`${this.url}/login`, login);
+  }
+
+  createUser(user: User): Observable<User> {
+    return this.http.post<User>(`${this.url}/user/users`, user);
   }
     
 }

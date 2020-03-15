@@ -5,6 +5,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { FuseSharedModule } from '@fuse/shared.module';
 
@@ -12,7 +13,7 @@ import { RegisterComponent } from 'app/main/register/register.component';
 
 const routes = [
     {
-        path     : 'register',
+        path: 'register',
         component: RegisterComponent
     }
 ];
@@ -21,7 +22,7 @@ const routes = [
     declarations: [
         RegisterComponent
     ],
-    imports     : [
+    imports: [
         RouterModule.forChild(routes),
 
         MatButtonModule,
@@ -29,10 +30,13 @@ const routes = [
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
+        MatDatepickerModule,
 
         FuseSharedModule
+    ],
+    providers: [
+        
     ]
 })
-export class RegisterModule
-{
+export class RegisterModule {
 }

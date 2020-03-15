@@ -1,40 +1,50 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { MAT_DATE_FORMATS, DateAdapter } from '@angular/material/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/internal/operators';
+import { Router } from '@angular/router';
 
 import { FuseConfigService } from '@fuse/services/config.service';
 import { fuseAnimations } from '@fuse/animations';
 
+import { DD_MM_YYYY_Format } from 'app/shared/date.format.constants';
+import { GatewayService } from 'app/shared/gateway.service';
+import { User } from 'app/model/user.model';
+
 @Component({
-    selector     : 'register',
-    templateUrl  : './register.component.html',
-    styleUrls    : ['./register.component.scss'],
+    selector: 'register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss'],
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations
+    animations: fuseAnimations,
+    providers: [
+        { provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format },
+    ]
 })
-export class RegisterComponent implements OnInit, OnDestroy
-{
+export class RegisterComponent implements OnInit, OnDestroy {
     registerForm: FormGroup;
+    msgError: string;
 
     // Private
     private _unsubscribeAll: Subject<any>;
 
     constructor(
         private _fuseConfigService: FuseConfigService,
-        private _formBuilder: FormBuilder
-    )
-    {
+        private _formBuilder: FormBuilder,
+        private router: Router,
+        private gatewayService: GatewayService
+    ) {
         // Configure the layout
         this._fuseConfigService.config = {
             layout: {
-                navbar   : {
+                navbar: {
                     hidden: true
                 },
-                toolbar  : {
+                toolbar: {
                     hidden: true
                 },
-                footer   : {
+                footer: {
                     hidden: true
                 },
                 sidepanel: {
@@ -54,12 +64,13 @@ export class RegisterComponent implements OnInit, OnDestroy
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         this.registerForm = this._formBuilder.group({
-            name           : ['', Validators.required],
-            email          : ['', [Validators.required, Validators.email]],
-            password       : ['', Validators.required],
+            name: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', Validators.required],
+            phone: ['', Validators.required],
+            birthday: ['', Validators.required],
             passwordConfirm: ['', [Validators.required, confirmPasswordValidator]]
         });
 
@@ -75,11 +86,38 @@ export class RegisterComponent implements OnInit, OnDestroy
     /**
      * On destroy
      */
-    ngOnDestroy(): void
-    {
+    ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next();
         this._unsubscribeAll.complete();
+    }
+
+    onRegister(): void {
+        console.log(this.registerForm);
+        let user = new User(
+            this.registerForm.get('name').value,
+            this.registerForm.get('email').value,
+            this.registerForm.get('phone').value,
+            this.registerForm.get('birthday').value.format('DD/MM/YYYY'),
+            this.registerForm.get('password').value
+        );
+        this.gatewayService.createUser(user)
+        .subscribe(
+            user => {
+                if(user) {
+                    this.router.navigate(['/register/success']);
+                } else {
+                    this.msgError = 'Ocorreu um erro ao salvar os dados. Tente novamente mais tarde!';
+                }
+            },
+            error => {
+                if(error.status === 400) {
+                    this.msgError = 'Confira os campos digitados e tente novamente!';
+                } else {
+                    this.msgError = 'Ocorreu um erro ao salvar os dados. Tente novamente mais tarde!';
+                }
+            }
+          );
     }
 }
 
@@ -91,28 +129,24 @@ export class RegisterComponent implements OnInit, OnDestroy
  */
 export const confirmPasswordValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
 
-    if ( !control.parent || !control )
-    {
+    if (!control.parent || !control) {
         return null;
     }
 
     const password = control.parent.get('password');
     const passwordConfirm = control.parent.get('passwordConfirm');
 
-    if ( !password || !passwordConfirm )
-    {
+    if (!password || !passwordConfirm) {
         return null;
     }
 
-    if ( passwordConfirm.value === '' )
-    {
+    if (passwordConfirm.value === '') {
         return null;
     }
 
-    if ( password.value === passwordConfirm.value )
-    {
+    if (password.value === passwordConfirm.value) {
         return null;
     }
 
-    return {passwordsNotMatching: true};
+    return { passwordsNotMatching: true };
 };
