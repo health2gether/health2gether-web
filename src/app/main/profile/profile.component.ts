@@ -2,6 +2,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
 
 import { fuseAnimations } from '@fuse/animations';
 
+import * as moment from 'moment';
+
 import { User } from 'app/model/user.model';
 import { GatewayService } from 'app/shared/gateway.service';
 import { AuthService } from 'app/main/auth.service';
@@ -16,18 +18,28 @@ import { AuthService } from 'app/main/auth.service';
 export class ProfileComponent
 {
     user: User;
+    about: any;
+
     /**
      * Constructor
      */
     constructor(
         private authService: AuthService,
-        private gatewayService: GatewayService
-    ){ 
-        this.gatewayService.getUser(authService.getToken())
+        private gatewayService: GatewayService,
+    ) { }
+
+    ngOnInit(): void
+    {
+        this.gatewayService.getUser(this.authService.getToken())
         .subscribe(
             user => {
                 if(user) {
-                    console.log(user);
+                    this.user = user;
+
+                    let now = moment(new Date());
+                    let end = moment(user.birthday, "DD/MM/YYYY")
+                    var duration = moment.duration(now.diff(end));
+                    this.user.age = duration.years();
                 } else {
                     console.error('Ocorreu um erro.');
                 }
